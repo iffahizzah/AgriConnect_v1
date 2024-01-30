@@ -37,20 +37,20 @@ const config = {
       },
     },
     {
-      widgetName: "noPovertyLinks",
+      widgetName: "zeroHungerLinks",
       widgetFunc: (props) => <LinkList {...props} />,
       props: {
         options: [
           {
-            text: "Overview of SDG1: No Poverty ",
+            text: "Overview of SDG2: Zero Hunger ",
             url:
-              "https://www.un.org/sustainabledevelopment/poverty/",
+              "https://www.globalgoals.org/goals/2-zero-hunger/",
             id: 1,
           },
           {
             text: "Additional Information",
             url:
-              "https://www.un.org/sustainabledevelopment/wp-content/uploads/2023/09/Goal-1_Fast-Facts.pdf",
+              "https://sdg-for-malaysian-states-sdsn.hub.arcgis.com/pages/sdg-2-zero-hunger",
             id: 2,
           },
         ],
@@ -70,7 +70,7 @@ const config = {
           {
             text: "Additional Information",
             url:
-              "https://www.un.org/sustainabledevelopment/sustainable-consumption-production/",
+              "https://sdg-for-malaysian-states-sdsn.hub.arcgis.com/pages/sdg-12-responsible-consumption-and-production",
             id: 2,
           },
         ],

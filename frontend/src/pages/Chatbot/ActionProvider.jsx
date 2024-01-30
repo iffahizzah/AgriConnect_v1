@@ -15,11 +15,11 @@ class ActionProvider {
     this.updateChatbotState(message);
   };
 
-  handleNoPovList = () => {
+  handleZeroHungerList = () => {
     const message = this.createChatBotMessage(
-      "Fantastic, I've got the following resources for you on Agriculture:",
+      "Fantastic, I've got the following resources for you on SDG 2: Zero Hunger:",
       {
-        widget: "noPovertyLinks",
+        widget: "zeroHungerLinks",
       }
     );
 
@@ -28,7 +28,7 @@ class ActionProvider {
 
   handleConsumpList = () => {
     const message = this.createChatBotMessage(
-      "Fantastic, I've got the following resources for you on Agriculture:",
+      "Fantastic, I've got the following resources for you on SDG 12: Responsible Consumption and Production:",
       {
         widget: "consumpLinks",
       }

@@ -8,8 +8,8 @@ const WidgetOptions = (props) => {
     handler: props.actionProvider.handleAgricultureList, 
     id: 1 
     },
-    { text: "SDG1: No Poverty", 
-    handler: props.actionProvider.handleNoPovList, 
+    { text: "SDG2: Zero Hunger", 
+    handler: props.actionProvider.handleZeroHungerList, 
     id: 2 },
     { text: "SDG12: Responsible Consumption and Production", 
     handler: props.actionProvider.handleConsumpList, 

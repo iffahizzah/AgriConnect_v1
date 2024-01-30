@@ -185,4 +185,87 @@ router.post("/select-winner/:id", async (req, res, next) => {
   }
 });
 
+router.get("/user-won-luckydraws/:userId", async (req, res) => {
+  try {
+      const  userId  = req.params.userId;
+
+      const wonLuckyDraws = await Luckydraw.find({
+          winnerID: userId,
+          status: "Ended"
+      })
+
+      res.status(200).json({
+          success: true,
+          wonLuckyDraws,
+      });
+  } catch (error) {
+      res.status(500).json({ message: "An error occurred", error: error.message });
+  }
+});
+
+router.get("/seller-luckydraws/:sellerId", async (req, res) => {
+  try {
+      const sellerId  = req.params.sellerId;
+
+      const sellerLuckyDraws = await Luckydraw.find({
+          shopId: sellerId,
+          status: "Ended"
+      });
+
+      res.status(200).json({
+          success: true,
+          sellerLuckyDraws,
+      });
+  } catch (error) {
+      res.status(500).json({ message: "An error occurred", error: error.message });
+  }
+});
+
+router.patch("/luckydraw-complete/:luckydrawId", async (req, res) => {
+  try {
+      const  luckydrawId  = req.params.luckydrawId;
+
+      const updatedLuckydraw = await Luckydraw.findByIdAndUpdate(
+          luckydrawId,
+          { Orderstatus: "Completed" },
+          { new: true }
+      );
+
+      if (!updatedLuckydraw) {
+          return res.status(404).json({ message: "Luckydraw not found" });
+      }
+
+      res.status(200).json({
+          success: true,
+          updatedLuckydraw
+      });
+  } catch (error) {
+      res.status(500).json({ message: "An error occurred", error: error.message });
+  }
+});
+
+router.patch("/luckydraw-cancel/:luckydrawId", async (req, res) => {
+  try {
+      const luckydrawId  = req.params.luckydrawId;
+
+      const updatedLuckydraw = await Luckydraw.findByIdAndUpdate(
+          luckydrawId,
+          { Orderstatus: "Cancelled" },
+          { new: true }
+      );
+
+      if (!updatedLuckydraw) {
+          return res.status(404).json({ message: "Luckydraw not found" });
+      }
+
+      res.status(200).json({
+          success: true,
+          updatedLuckydraw
+      });
+  } catch (error) {
+      res.status(500).json({ message: "An error occurred", error: error.message });
+  }
+});
+
+
 module.exports = router;

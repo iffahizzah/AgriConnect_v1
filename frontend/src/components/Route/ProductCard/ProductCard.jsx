@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   AiFillStar,
+  AiOutlineEye,
   AiOutlineShoppingCart,
   AiOutlineStar,
 } from "react-icons/ai";
@@ -20,21 +21,17 @@ const ProductCard = ({ data }) => {
     <>
       <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
         <div className="flex justify-end"></div>
-        <Link to={`/product/${data._id}`}>
-          <img
-            src={
-              data.images?.length > 0 ? `${backend_url}${data.images[0]}` : null
-            }
-            alt=""
-            className="w-full h-[170px] object-contain"
-          />
-        </Link>
+        <img
+          src={
+            data.images?.length > 0 ? `${backend_url}${data.images[0]}` : null
+          }
+          alt=""
+          className="w-full h-[170px] object-contain"
+        />
 
         <Link to="/">
           <h5 className={"${styles.shop_name}"}>{data.shop.name}</h5>
         </Link>
-
-        <Link to={`/product/${product_name}`}>
           <h4 className="pb-3 font-[500]">
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
@@ -82,12 +79,11 @@ const ProductCard = ({ data }) => {
               {data.total_sell} sold
             </span>
           </div>
-        </Link>
 
         {/* side options */}
 
         <div>
-          <AiOutlineShoppingCart
+          <AiOutlineEye
             size={25}
             className="cursor-pointer absolute right-2 top-5"
             onClick={() => setOpen(!open)}

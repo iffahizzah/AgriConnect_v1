@@ -3,12 +3,17 @@ import { AiOutlineMessage, AiOutlineShoppingCart } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
 import styles from "../../../styles/styles";
 import CountDown from "../../Events/CountDown";
-import { backend_url } from "../../../server";
+import { backend_url, server } from "../../../server";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [bidPrice, setBidPrice] = useState("");
+  const { user } = useSelector((state) => state.user);
   //const [select, setSelect] = useState(false);
 
   const handleMessageSubmit = () => {};
@@ -18,12 +23,31 @@ const ProductDetailsCard = ({ setOpen, data }) => {
     setBidPrice(value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle the bidding form submission here
-    console.log("Bidding form submitted with price:", bidPrice);
-    // Reset the bidPrice state if needed
-    setBidPrice("");
+
+    const biddingId = data._id; // or however you get the bidding ID
+    const userId = user._id;
+
+    try {
+      const response = await axios.post(
+        `${server}/bidding/submit-bid/${biddingId}`,
+        {
+          userId: userId,
+          bidAmount: parseFloat(bidPrice),
+        }
+      );
+      toast.success(response.status.message);
+      window.location.reload(true);
+      setBidPrice("");
+    } catch (error) {
+      toast.error(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : "An error occurred"
+      );
+      // Handle errors (e.g., show an error message to the user)
+    }
   };
 
   return (
@@ -47,10 +71,9 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                     className="w-[50px] h-[50px] rounded-full mr-2"
                   />
                   <div>
-                    <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                    <h5 className="pb-3 text-[15px]">
-                      ({data.shop.ratings}) Ratings
-                    </h5>
+                  <Link to={`/shop/farmer/${data.shop._id}`}>
+                  <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
+                  </Link>
                   </div>
                 </div>
 
@@ -62,8 +85,8 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                     Send Message <AiOutlineMessage className="ml-1" />
                   </span>
                 </div>
-                <h5 className="text-[16px] text-[red] mt-5">
-                  ({data.total_sell}) Sold out
+                <h5 className="text-[16px] text-[black] mt-5">
+                  {data.shop.address}
                 </h5>
               </div>
 
@@ -75,26 +98,30 @@ const ProductDetailsCard = ({ setOpen, data }) => {
 
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    {data.minimumPrice ? "RM" + data.minimumPrice : null}
+                    {data.highestBid === 0
+                      ? "RM " + data.minimumPrice
+                      : "RM " + data.highestBid}
                   </h4>
                 </div>
 
                 <br />
                 <br />
 
-                                <form onSubmit={handleSubmit}>
-                                    <label className="block mb-2 text-sm font-bold text-[30px] text-gray-900">Your Bid Price:</label>
-                                    <input
-                                        type="number"
-                                        name="bidPrice"
-                                        value={bidPrice}
-                                        onChange={handleChange}
-                                        placeholder="Enter your bid price"
-                                        className="appearance-none block w-full px-3 py-2 border border-teal-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-teal-500 sm:text-sm"
-                                        required
-                                    />
+                <form onSubmit={handleSubmit}>
+                  <label className="block mb-2 text-sm font-bold text-[30px] text-gray-900">
+                    Your Bid Price:
+                  </label>
+                  <input
+                    type="number"
+                    name="bidPrice"
+                    value={bidPrice}
+                    onChange={handleChange}
+                    placeholder="Enter your bid price"
+                    className="appearance-none block w-full px-3 py-2 border border-teal-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-teal-500 sm:text-sm"
+                    required
+                  />
 
-                                    <br />
+                  <br />
 
                   <button
                     type="submit"
@@ -108,7 +135,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 <br />
 
                 <div>
-                  <CountDown data={data}/>
+                  <CountDown data={data} />
                 </div>
 
                 <div
